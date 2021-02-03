@@ -1,51 +1,102 @@
 import tkinter as tk
 from tkinter import ttk
 
-# create a ticker input
-# create an api to grab data of the ticker
-# create text box for prc_pur, shares, prc_sold
-# -google what tkinter text boxes should take input
-# create button to calculate
-# create box to display result for profit
-# -google what tkinter text boxes should display text
-# create box to display result for profit
-
-
-# create tkinter frame to hold everything
-
-# prc_pur = float(input("Enter current trading price of the stock: "))
-# shares = float(input("Enter the amount of shares you're buying: "))
-# prc_sold = float(input("Enter the trading price of the stock at sale: "))
-
-
-# def calculate():
-#     value = prc_sold*shares
-#     cost = prc_pur*shares
-
-#     profit = value - cost
-
-#     gain = (prc_sold - prc_pur/prc_pur) * 100  # for percentage gain
-#     # profit =
-
-#     return profit
-
-# result = calculate()
-# print(result)
+height = 160
+width = 400
 
 window = tk.Tk()
 window.title("Stock Gain Calculator")
 window.resizable(width=False, height=False)
-# hi
-# window.geometry('{}x{}'.format(width, height))
 
-# frame = tk.Frame(window, height=225, width=300, bg='black')
-# frame.pack()
+window.geometry('{}x{}'.format(width, height))
 
-textbox = tk.Text(window, x=150, y=10)
-textbox.place()
+# string variables
+pp_sv = tk.StringVar()
+pp_sv.set('Purchase Price')
 
-# button = tk.Frame(frame)
-# button.pack()
+share_sv = tk.StringVar()
+share_sv.set("# of Shares")
 
+sp_sv = tk.StringVar()
+sp_sv.set("Sale Price")
+
+but_sv = tk.StringVar()
+but_sv.set("Calculate")
+
+res_sv = tk.StringVar()
+res_sv.set("Total Profit: ")
+
+clr_sv = tk.StringVar()
+clr_sv.set("Clear")
+
+# labels
+
+pp_label = tk.Label(window, textvariable=pp_sv)
+pp_label.place(x=20, y=10)
+
+share_label = tk.Label(window, textvariable=share_sv)
+share_label.place(x=170, y=10)
+
+sp_label = tk.Label(window, textvariable=sp_sv)
+sp_label.place(x=20, y=60)
+
+but_label = tk.Label(window, textvariable=but_sv)
+but_label.place(x=20, y=110)
+
+result_label = tk.Label(window, textvariable=res_sv)
+result_label.place(x=170, y=60)
+
+result = tk.Label(window)
+result.place(x=270, y=60)
+
+clear_label = tk.Label(window, textvariable=clr_sv)
+clear_label.place(x=170, y=110)
+# input boxes
+
+pp_box = tk.Text(window, height=2, width=4)
+pp_box.place(x=120, y=10)
+
+sp_box = tk.Text(window, height=2, width=4)
+sp_box.place(x=120, y=60)
+
+share_box = tk.Text(window, height=2, width=4)
+share_box.place(x=270, y=10)
+
+
+def calculate():
+    # grab text values of all three boxes
+
+    try:
+        prc_pur = int(pp_box.get(1.0, "end-1c"))
+        shares = int(share_box.get(1.0, "end-1c"))
+        prc_sold = int(sp_box.get(1.0, "end-1c"))
+    except ValueError:
+        pass
+
+    value = prc_sold*shares
+    cost = prc_pur*shares
+
+    profit = value - cost
+    profit = "$" + str(profit)
+
+    gain = (prc_sold - prc_pur/prc_pur) * 100  # for percentage gain
+
+    result.config(text=profit)
+
+
+def clear():
+    pp_box.delete("1.0", "end")
+    sp_box.delete("1.0", "end")
+    share_box.delete("1.0", "end")
+
+# buttons
+
+
+calc_button = tk.Button(window, height=2, width=4, command=calculate)
+calc_button.place(x=120, y=110)
+
+clear_button = tk.Button(window, height=2, width=4,
+                         command=clear)  # command=clear function
+clear_button.place(x=270, y=110)
 
 window.mainloop()
