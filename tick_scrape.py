@@ -10,19 +10,25 @@ from bs4 import BeautifulSoup
 # find element that holds price, store in text variable
 # have text variable insert into purchasing price
 
-ticker = 'GME'
 
-url = f'https://finance.yahoo.com/quote/{ticker}?p={ticker}'
+def scrape():
 
-# store webpage in variable
+    ticker = 'GME'
 
-html = urlopen(url)
+    url = f'https://finance.yahoo.com/quote/{ticker}?p={ticker}'
 
-# convert webpage to soup object
+    # store webpage in variable
 
-soup = BeautifulSoup(html)
+    html = urlopen(url)
 
-print(soup)
+    # convert webpage to soup object
+
+    soup = BeautifulSoup(html, 'html.parser')
+
+    price = soup.find(
+        'span', {'class': 'Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)'})
+
+    print(price.get_text())
 
 # soup find all  (span)
 # soup gettext
