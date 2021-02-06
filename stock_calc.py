@@ -56,6 +56,10 @@ tick_sv.set('Ticker')
 tick_label = tk.Label(window, textvariable=tick_sv)
 tick_label.place(x=320, y=10)
 
+but_tick_sv = tk.StringVar()
+but_tick_sv.set('Generate')
+but_tick_label = tk.Label(window, textvariable=but_tick_sv)
+but_tick_label.place(x=320, y=110)
 
 # input boxes
 
@@ -69,18 +73,43 @@ share_box = tk.Text(window, height=2, width=4)
 share_box.place(x=270, y=10)
 
 tick_box = tk.Text(window, height=2, width=4)
-tick_box.place()
+tick_box.place(x=420, y=10)
+
+
+def scrape():
+
+    # ticker will be "get_text of ticker entry box"
+
+    ticker = tick_box.get(1.0, "end-1c")
+
+    url = f'https://finance.yahoo.com/quote/{ticker}?p={ticker}'
+
+    # store webpage in variable
+
+    html = urlopen(url)
+
+    # convert webpage to soup object
+
+    soup = BeautifulSoup(html, 'html.parser')
+
+    price_elem = soup.find(
+        'span', {'class': 'Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)'})
+
+    num = round(float(price_elem.get_text()), 2)
+
+    price = str(num)
+
+    # fill prc_price
+    pp_box.insert(0.0, price)
 
 
 def calculate():
+
     # grab text values of all three boxes
 
-    try:
-        prc_pur = int(pp_box.get(1.0, "end-1c"))
-        shares = int(share_box.get(1.0, "end-1c"))
-        prc_sold = int(sp_box.get(1.0, "end-1c"))
-    except ValueError:
-        pass
+    prc_pur = round(float(pp_box.get(1.0, "end-1c")), 2)
+    shares = round(float(share_box.get(1.0, "end-1c")), 2)
+    prc_sold = round(float(sp_box.get(1.0, "end-1c")), 2)
 
     value = prc_sold*shares
     cost = prc_pur*shares
@@ -97,44 +126,26 @@ def clear():
     pp_box.delete("1.0", "end")
     sp_box.delete("1.0", "end")
     share_box.delete("1.0", "end")
+    tick_box.delete("1.0", "end")
 
-
-# ticker will be "get_text of ticker entry box"
-
-def scrape(ticker):
-
-    url = f'https://finance.yahoo.com/quote/{ticker}?p={ticker}'
-
-    # store webpage in variable
-
-    html = urlopen(url)
-
-    # convert webpage to soup object
-
-    soup = BeautifulSoup(html, 'html.parser')
-
-    price_elem = soup.find(
-        'span', {'class': 'Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)'})
-
-    price = price_elem.get_text()
-
-    return price
+    # return price
 
 
 # cur_price = scrape()
 
 # print(cur_price)
 
-
 # buttons
-
-
 calc_button = tk.Button(window, height=2, width=4, command=calculate)
 calc_button.place(x=120, y=110)
 
 clear_button = tk.Button(window, height=2, width=4,
                          command=clear)  # command=clear function
 clear_button.place(x=270, y=110)
+
+tick_button = tk.Button(window, height=2, width=4, command=scrape)
+tick_button.place(x=420, y=110)
+
 
 window.mainloop()
 
