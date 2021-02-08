@@ -115,7 +115,8 @@ def calculate():
     cost = prc_pur*shares
 
     profit = value - cost
-    profit = "$" + str(profit)
+    new_profit = round(float(profit), 2)
+    profit = "$" + str(new_profit)
 
     gain = (prc_sold - prc_pur/prc_pur) * 100  # for percentage gain
 
