@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import json
+
 
 height = 160
 width = 500
@@ -77,31 +79,39 @@ tick_box.place(x=420, y=10)
 
 def scrape():
 
+    # ticker will be "get_text of ticker entry box"
+
     ticker = tick_box.get(1.0, "end-1c")
 
-    url = f'https://finance.yahoo.com/quote/{ticker}?p={ticker}'
+    url = f'https://query1.finance.yahoo.com/v8/finance/chart/{ticker}'
+
+    data = json.load(urlopen(url))
+
+    the_price = data['chart']['result'][0]['meta']['regularMarketPrice']
 
     # store webpage in variable
 
-    html = urlopen(url)
+    # html = urlopen(url)
 
-    # convert webpage to soup object
+    # # convert webpage to soup object
 
-    soup = BeautifulSoup(html, 'html.parser')
+    # soup = BeautifulSoup(html, 'html.parser')
 
-    price_elem = soup.find(
-        'span', {'class': 'Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)'})
+    # price_elem = soup.find(
+    #     'span', {'class': 'Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)'})
 
-    num = round(float(price_elem.get_text()), 2)
+    # num = round(float(price_elem.get_text()), 2)
 
-    price = str(num)
+    price = str(the_price)
 
+    # fill prc_price
     pp_box.insert(0.0, price)
 
 
 def calculate():
 
     # grab text values of all three boxes
+
     prc_pur = round(float(pp_box.get(1.0, "end-1c")), 2)
     shares = round(float(share_box.get(1.0, "end-1c")), 2)
     prc_sold = round(float(sp_box.get(1.0, "end-1c")), 2)
@@ -117,13 +127,19 @@ def calculate():
 
     result.config(text=profit)
 
+
 def clear():
     pp_box.delete("1.0", "end")
     sp_box.delete("1.0", "end")
     share_box.delete("1.0", "end")
     tick_box.delete("1.0", "end")
 
+    # return price
 
+
+# cur_price = scrape()
+
+# print(cur_price)
 
 # buttons
 calc_button = tk.Button(window, height=2, width=4, command=calculate)
@@ -138,3 +154,5 @@ tick_button.place(x=420, y=110)
 
 
 window.mainloop()
+
+# create ticker entry box
