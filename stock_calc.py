@@ -89,19 +89,6 @@ def scrape():
 
     the_price = data['chart']['result'][0]['meta']['regularMarketPrice']
 
-    # store webpage in variable
-
-    # html = urlopen(url)
-
-    # # convert webpage to soup object
-
-    # soup = BeautifulSoup(html, 'html.parser')
-
-    # price_elem = soup.find(
-    #     'span', {'class': 'Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)'})
-
-    # num = round(float(price_elem.get_text()), 2)
-
     price = str(the_price)
 
     # fill prc_price
@@ -133,13 +120,6 @@ def clear():
     sp_box.delete("1.0", "end")
     share_box.delete("1.0", "end")
     tick_box.delete("1.0", "end")
-
-    # return price
-
-
-# cur_price = scrape()
-
-# print(cur_price)
 
 # buttons
 calc_button = tk.Button(window, height=2, width=4, command=calculate)
